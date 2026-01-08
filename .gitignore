@@ -1,0 +1,25 @@
+# Ambientes Virtuais
+venv/
+env/
+.venv/
+
+# Variáveis de Ambiente (Segurança!)
+.env
+
+# Banco de Dados Local (Caso use SQLite para testes rápidos)
+*.sqlite3
+
+# Arquivos de Sistema
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+Thumbs.db
+
+# Mídia e Uploads (Geralmente não se sobe para o Git em produção)
+media/
+static_root/
+
+# IDEs
+.vscode/
+.idea/

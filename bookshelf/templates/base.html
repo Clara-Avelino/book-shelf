@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Book Shelf</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      :root {
+        --bg-main: #fbfae6;
+        --brand-green: #93b90e;
+        --brand-yellow: #e3b91c;
+      }
+      body {
+        background-color: var(--bg-main);
+        font-family: "Inter", sans-serif;
+      }
+      .btn-primary {
+        background-color: var(--brand-green);
+        color: white;
+        transition: 0.3s;
+      }
+      .btn-primary:hover {
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+</html>

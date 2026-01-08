@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background-color: #fbfae6;
+      }
+    </style>
+  </head>
+  <body class="p-8">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-sm">
+      <h1 class="text-2xl font-bold text-[#93b90e] mb-6">
+        Novo Livro no Book Shelf
+      </h1>
+
+      <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %} {{ form.as_p }}
+
+        <div class="pt-6">
+          <button
+            type="submit"
+            class="w-full bg-[#93b90e] text-white p-4 rounded-xl font-bold hover:bg-[#7a9a0b] transition"
+          >
+            Salvar no Acervo
+          </button>
+          <a
+            href="{% url 'dashboard' %}"
+            class="block text-center mt-4 text-gray-500"
+            >Cancelar</a
+          >
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
