@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from .forms import BookForm
-
 
 def dashboard(request):
     # Lógica para os contadores do topo da tela (Fiel ao seu print do Figma)
@@ -34,3 +33,27 @@ def adicionar(request):
     else:
         form = BookForm()
     return render(request, 'bookshelf/form.html', {'form': form})
+
+def editar(request, pk):
+    # Busca o livro pelo ID (primary key) ou retorna 404 se não existir
+    book = get_object_or_404(Book, pk=pk)
+    
+    if request.method == 'POST':
+        # instance=book diz ao Django que estamos editando um livro existente, não criando um novo
+        form = BookForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = BookForm(instance=book)
+    
+    return render(request, 'bookshelf/form.html', {'form': form, 'editing': True})
+
+def excluir(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('dashboard')
+    
+    # Se não for POST, mostra uma página de confirmação simples
+    return render(request, 'bookshelf/confirm_delete.html', {'book': book})
