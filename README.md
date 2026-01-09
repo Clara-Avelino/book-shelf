@@ -59,15 +59,15 @@ Primeiro, siga os passos para criar banco de dados no `Neon`
 - A região `AWS América do Sul Leste 1 (São Paulo)`
 - E clique em `Criar`
 
-![alt text](./bookshelf/templates/img/image-1.png)
+![alt text](./bookshelf/templates/img/image-1.jpeg)
 
 Agora para conectar ao banco de dados, clique em `Conectar`.
 
-![alt text](./bookshelf/templates/img/image-2.png)
+![alt text](./bookshelf/templates/img/image-2.jpeg)
 
 Ira abrir outro modal, copie a `String de conexão`
 
-![alt text](./bookshelf/templates/img/image-3.png)
+![alt text](./bookshelf/templates/img/image-3.jpeg)
 
 Crie um arquivo chamado `.env` na raiz do projeto e cole a `String de conexão` na variável `DB_URL` conforme o exemplo abaixo:
 
@@ -117,16 +117,16 @@ python manage.py runserver
 
 Acesse: http://127.0.0.1:8000 e cadastre um novo livro em para visualizar no dashboard.
 
-![alt text](./bookshelf/templates/img/image-4.png)
+![alt text](./bookshelf/templates/img/image-4.jpeg)
 
 Em http://127.0.0.1:8000/adicionar/ você pode adicionar novos livros via formulário.
 
-![alt text](./bookshelf/templates/img/image-5.png)
+![alt text](./bookshelf/templates/img/image-5.jpeg)
 
 ### 4. Visualização das tabelas no Neon
 
 Acesse o painel do Neon e em `Branch`, vá em `Tables`, selecione a tabela `bookshelf_book` para visualizar os dados cadastrados via `Django Admin` ou formulário.
-![alt text](./bookshelf/templates/img/image-6.png)
+![alt text](./bookshelf/templates/img/image-6.jpeg)
 
 > Seu projeto Book Shelf está pronto para uso!
 
