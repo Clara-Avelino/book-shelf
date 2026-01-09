@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from .forms import BookForm
+from django.contrib import messages
 
 def dashboard(request):
-    # Lógica para os contadores do topo da tela (Fiel ao seu print do Figma)
     total_books = Book.objects.count()
     lidos = Book.objects.filter(status='lido').count()
     lendo = Book.objects.filter(status='lendo').count()
@@ -18,7 +18,7 @@ def dashboard(request):
         'lendo': lendo,
         'quero_ler': quero_ler,
         'books': books,
-        'username': 'Clara Maria', # Exemplo conforme seu Figma
+        'username': 'Clara Maria',
     }
 
     return render(request, 'bookshelf/dashboard.html', context)
@@ -29,7 +29,9 @@ def adicionar(request):
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('dashboard') # Volta para a tela principal
+
+            messages.success(request, 'Livro adicionado com sucesso!')
+            return redirect('dashboard')
     else:
         form = BookForm()
     return render(request, 'bookshelf/form.html', {'form': form})
@@ -39,10 +41,11 @@ def editar(request, pk):
     book = get_object_or_404(Book, pk=pk)
     
     if request.method == 'POST':
-        # instance=book diz ao Django que estamos editando um livro existente, não criando um novo
         form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             form.save()
+
+            messages.success(request, 'Alterações salvas com sucesso!')
             return redirect('dashboard')
     else:
         form = BookForm(instance=book)
@@ -53,6 +56,8 @@ def excluir(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
         book.delete()
+
+        messages.success(request, 'O livro foi removido da sua estante.')
         return redirect('dashboard')
     
     # Se não for POST, mostra uma página de confirmação simples

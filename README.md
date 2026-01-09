@@ -138,30 +138,31 @@ Acesse o painel do Neon e em `Branch`, vá em `Tables`, selecione a tabela `book
 
 ```text
 /book-shelf
-├── bookshelf/                    # App principal do Book Shelf
-│   ├── static/                   # Arquivos de estilo e scripts
-│   ├── templates/                # Telas HTML (Dashboard e Formulários)
-│   |   ├── bookshelf/            # Templates específicos do app
-│   |   |    ├── dashboard.html   # Tela principal do dashboard
-│   |   |    └── form.html        # Formulário de cadastro
-│   |   └── base.html             # Template base
-│   ├── admin.py                  # Configuração do Painel Administrativo
-│   ├── forms.py                  # Validação de entradas e uploads
-│   ├── models.py                 # Modelagem do Banco de Dados
-│   ├── urls.py                   # Rotas do aplicativo
-│   └── views.py                  # Lógica de negócio e contadores
-├── core/                         # Configurações globais do Django
-│   ├── settings.py               # Configurações do projeto
-│   ├── urls.py                   # Rotas principais do projeto
-├── media/                        # Armazenamento de capas e arquivos
-│   ├── covers/                   # Capas dos livros
-│   └── ebooks/                   # Arquivos dos e-books
-├── venv/                         # Ambiente virtual Python
-├── .env                          # Credenciais sensíveis (PaaS 03)
-├── .gitignore                    # Arquivos e pastas ignoradas pelo Git
-├── manage.py                     # CLI do Django
-├── README.md                     # Documentação do projeto
-└── requirements.txt              # Lista de dependências
+├── bookshelf/                          # App principal do Book Shelf
+│   ├── static/                         # Arquivos de estilo e scripts
+│   ├── templates/                      # Telas HTML (Dashboard e Formulários)
+│   |   ├── bookshelf/                  # Templates específicos do app
+│   |   |    ├── confirm_delete.html    # Tela de confirmação de exclusão
+│   |   |    ├── dashboard.html         # Tela principal do dashboard
+│   |   |    └── form.html              # Formulário de cadastro
+│   |   └── base.html                   # Template base
+│   ├── admin.py                        # Configuração do Painel Administrativo
+│   ├── forms.py                        # Validação de entradas e uploads
+│   ├── models.py                       # Modelagem do Banco de Dados
+│   ├── urls.py                         # Rotas do aplicativo
+│   └── views.py                        # Lógica de negócio e contadores
+├── core/                               # Configurações globais do Django
+│   ├── settings.py                     # Configurações do projeto
+│   ├── urls.py                         # Rotas principais do projeto
+├── media/                              # Armazenamento de capas e arquivos
+│   ├── covers/                         # Capas dos livros
+│   └── ebooks/                         # Arquivos dos e-books
+├── venv/                               # Ambiente virtual Python
+├── .env                                # Credenciais sensíveis (PaaS 03)
+├── .gitignore                          # Arquivos e pastas ignoradas pelo Git
+├── manage.py                           # CLI do Django
+├── README.md                           # Documentação do projeto
+└── requirements.txt                    # Lista de dependências
 ```
 
 ### 🛠️ Tecnologias usadas
