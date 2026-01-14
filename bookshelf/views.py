@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from .forms import BookForm
 from django.contrib import messages
+from rest_framework import viewsets
+from .serializers import BookSerializer
 
 def dashboard(request):
     user_id = request.external_user_id
@@ -10,20 +12,16 @@ def dashboard(request):
 
     # Se não tiver token válido, não entra
     if not user_id:
-        return JsonResponse(
-            {'error': 'Usuário não autenticado'},
-            status=401
-        )
+        return JsonResponse({'error': 'Usuário não autenticado'}, status=401)
     
-    # Isolamento de dados (filtrado por usuário)
-    books = Book.objects.filter(external_user_id=user_id).order_by('-created_at')
+    # Todos os contadores agora usam .filter(external_user_id=user_id)
+    user_books = Book.objects.filter(external_user_id=user_id)
     
-    total_books = Book.objects.count()
-    lidos = Book.objects.filter(status='lido').count()
-    lendo = Book.objects.filter(status='lendo').count()
-    quero_ler = Book.objects.filter(status='quero_ler').count()
-
-    
+    books = user_books.order_by('-created_at')
+    total_books = user_books.count()
+    lidos = user_books.filter(status='lido').count()
+    lendo = user_books.filter(status='lendo').count()
+    quero_ler = user_books.filter(status='quero_ler').count()
 
     context = {
         'total_books': total_books,
@@ -33,7 +31,6 @@ def dashboard(request):
         'books': books,
         'username': username,
     }
-
     return render(request, 'bookshelf/dashboard.html', context)
 
 def adicionar(request):
@@ -75,3 +72,15 @@ def excluir(request, pk):
     
     # Se não for POST, mostra uma página de confirmação simples
     return render(request, 'bookshelf/confirm_delete.html', {'book': book})
+
+# NOVA API (JSON)
+class BookViewSet(viewsets.ModelViewSet):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        # A API só mostrará os livros do usuário dono do Token
+        return Book.objects.filter(external_user_id=self.request.external_user_id)
+
+    def perform_create(self, serializer):
+        # Ao salvar via API, vincula automaticamente ao usuário do Token
+        serializer.save(external_user_id=self.request.external_user_id)
