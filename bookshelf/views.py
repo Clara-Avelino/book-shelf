@@ -38,7 +38,9 @@ def adicionar(request):
         # request.FILES é obrigatório para capturar a capa e o PDF
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            book.external_user_id = request.external_user_id
+            book.save()
 
             messages.success(request, 'Livro adicionado com sucesso!')
             return redirect('dashboard')
