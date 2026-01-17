@@ -29,6 +29,9 @@ SECRET_KEY = 'django-insecure-6^t+e_%!7^dr$q0z@5k#0e6^t1^bg!g)48967@y=w-c!sv5n(_
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+DEV_FAKE_USER_ID = 1
+DEV_FAKE_USERNAME = "Clara Maria"
+
 
 ALLOWED_HOSTS = []
 
@@ -47,6 +50,17 @@ INSTALLED_APPS = [
     'bookshelf',                    # Adicionado para o app de livros
 ]
 
+# Configura o Django REST
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Book Shelf - Sistema de Gerenciamento de Acervos',
+    'DESCRIPTION': 'O Book Shelf é uma aplicação Full Stack desenvolvida em Django para o gerenciamento de livros e e-books. O projeto utiliza uma arquitetura baseada em microsserviços e separação de responsabilidades em diferentes plataformas (PaaS).',
+    'VERSION': '1.0.0',
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,7 +69,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.JWTAuthMiddleware' # Registrando o middleware
 ]
+
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') # Integração real de microsserviços
 
 ROOT_URLCONF = 'core.urls'
 

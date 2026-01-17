@@ -1,18 +1,30 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from .forms import BookForm
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.shortcuts import redirect
+
+from rest_framework import viewsets
+from .serializers import BookSerializer
+
 
 def dashboard(request):
-    total_books = Book.objects.count()
-    lidos = Book.objects.filter(status='lido').count()
-    lendo = Book.objects.filter(status='lendo').count()
-    quero_ler = Book.objects.filter(status='quero_ler').count()
+    user_id = request.external_user_id
+    username = request.external_username
 
-    # Pega todos os livros para listar abaixo
-    books = Book.objects.all().order_by('-created_at')
+    # Se não tiver token válido, não entra
+    if not user_id:
+        return JsonResponse({'error': 'Usuário não autenticado'}, status=401)
+    
+    # Todos os contadores agora usam .filter(external_user_id=user_id)
+    user_books = Book.objects.filter(external_user_id=user_id)
+    
+    books = user_books.order_by('-created_at')
+    total_books = user_books.count()
+    lidos = user_books.filter(status='lido').count()
+    lendo = user_books.filter(status='lendo').count()
+    quero_ler = user_books.filter(status='quero_ler').count()
 
     context = {
         'total_books': total_books,
@@ -20,9 +32,8 @@ def dashboard(request):
         'lendo': lendo,
         'quero_ler': quero_ler,
         'books': books,
-        'username': 'Clara Maria',
+        'username': username,
     }
-
     return render(request, 'bookshelf/dashboard.html', context)
 
 def adicionar(request):
@@ -30,7 +41,9 @@ def adicionar(request):
         # request.FILES é obrigatório para capturar a capa e o PDF
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            book.external_user_id = request.external_user_id
+            book.save()
 
             messages.success(request, 'Livro adicionado com sucesso!')
             return redirect('dashboard')
@@ -39,8 +52,8 @@ def adicionar(request):
     return render(request, 'bookshelf/form.html', {'form': form})
 
 def editar(request, pk):
-    # Busca o livro pelo ID (primary key) ou retorna 404 se não existir
-    book = get_object_or_404(Book, pk=pk)
+    # Busca o livro que pertence ao o usuário pelo ID (primary key) ou retorna 404 se não existir
+    book = get_object_or_404(Book, pk=pk, external_user_id=request.external_user_id)
     
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES, instance=book)
@@ -55,7 +68,7 @@ def editar(request, pk):
     return render(request, 'bookshelf/form.html', {'form': form, 'editing': True})
 
 def excluir(request, pk):
-    book = get_object_or_404(Book, pk=pk)
+    book = get_object_or_404(Book, pk=pk, external_user_id=request.external_user_id)
     if request.method == 'POST':
         book.delete()
 
@@ -66,13 +79,26 @@ def excluir(request, pk):
     return render(request, 'bookshelf/confirm_delete.html', {'book': book})
 
 
+# NOVA API (JSON)
+class BookViewSet(viewsets.ModelViewSet):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        # A API só mostrará os livros do usuário dono do Token
+        return Book.objects.filter(external_user_id=self.request.external_user_id)
+
+    def perform_create(self, serializer):
+        # Ao salvar via API, vincula automaticamente ao usuário do Token
+        serializer.save(external_user_id=self.request.external_user_id)
+
 def login_view(request):
     return render(request, 'bookshelf/login.html')
 
-def logout_view(request):
-    logout(request)
-    return redirect('login')
 
 def register_view(request):
     return render(request, 'bookshelf/register.html')
 
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
