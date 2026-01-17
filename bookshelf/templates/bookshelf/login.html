@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Book Shelf</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+
+<div class="login-page">
+
+    <div class="login-left">
+        <img src="{% static 'images/LogoLivraria.png' %}" class="illustration">
+        <h1>Book Shelf</h1>
+        <h3>Sua biblioteca digital pessoal</h3>
+        <p>Organize, gerencie e acesse seus livros de qualquer lugar</p>
+    </div>
+
+    <div class="login-right">
+        <div class="login-card">
+
+            <div class="card-logo">
+                <img src="{% static 'images/LogoLivraria.png' %}">
+                <strong>Book Shelf</strong>
+                <span>Sua biblioteca digital</span>
+            </div>
+
+            <p class="card-subtitle">Acesse sua conta ou crie uma nova</p>
+
+            <div class="tabs">
+                <a href="{% url 'login' %}" class="tab active">Entrar</a>
+                <a href="{% url 'register' %}" class="tab">Cadastrar</a>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <label>E-mail</label>
+                <input type="email" placeholder="seu@email.com">
+
+                <label>Senha</label>
+                <input type="password" placeholder="********">
+
+                <button class="btn-login">➜ Entrar</button>
+            </form>
+
+            <div class="divider"><span>ou</span></div>
+
+            <button class="btn-google">
+                <span class="google-icon">G</span>
+                Entrar com Google
+            </button>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

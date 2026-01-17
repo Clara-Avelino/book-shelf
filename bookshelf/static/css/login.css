@@ -1,0 +1,198 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background-color: #FFF9E6;
+}
+
+.login-page {
+    display: flex;
+    height: 100vh;
+}
+
+/* LEFT */
+.login-left {
+    width: 55%;
+    padding: 80px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.illustration {
+    width: 420px;
+    margin-bottom: 40px;
+}
+
+.login-left h1 {
+    font-size: 48px;
+    color: #7FB800;
+}
+
+.login-left h3 {
+    font-size: 18px;
+    color: #F4A300;
+    margin: 12px 0;
+}
+
+.login-left p {
+    font-size: 16px;
+    color: #444;
+    max-width: 420px;
+}
+
+/* RIGHT */
+.login-right {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CARD */
+.login-card {
+    width: 430px;
+    background: #FFF;
+    border-radius: 20px;
+    padding: 22px 42px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+}
+
+/* LOGO */
+.card-logo {
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.card-logo img {
+    width: 34px;
+}
+
+.card-logo strong {
+    display: block;
+    color: #7FB800;
+    font-size: 15px;
+}
+
+.card-logo span {
+    font-size: 12px;
+    color: #F4A300;
+}
+
+/* SUBTITLE */
+.card-subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+    margin: 8px 0 12px;
+}
+
+/* TABS */
+.tabs {
+    display: flex;
+    background: #F5F5F5;
+    border-radius: 999px;
+    padding: 3px;
+    margin-bottom: 12px;
+}
+
+.tab {
+    flex: 1;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #555;
+    border-radius: 999px;
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+.tab:hover,
+.tab:focus,
+.tab:visited,
+.tab:active {
+    text-decoration: none !important;
+    color: #555;
+}
+
+.tab.active {
+    background: #FFF;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    font-weight: 600;
+}
+
+/* FORM */
+label {
+    font-size: 13px;
+    margin-bottom: 2px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 9px 14px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    border: 1px solid #CCC;
+}
+
+/* BUTTON */
+.btn-login {
+    width: 100%;
+    padding: 11px;
+    background: #7FB800;
+    border: none;
+    border-radius: 14px;
+    color: #FFF;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.btn-login:hover {
+    background: #6AA000;
+}
+
+/* DIVIDER */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #DDD;
+}
+
+.divider span {
+    margin: 0 10px;
+    font-size: 13px;
+    color: #999;
+}
+
+/* GOOGLE */
+.btn-google {
+    width: 100%;
+    padding: 9px;
+    background: #FFF;
+    border: 1px solid #DDD;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* REGISTER = MESMO TAMANHO DO LOGIN */
+.register-card {
+    padding: 22px 42px;
+}
