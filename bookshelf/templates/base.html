@@ -51,6 +51,9 @@
           setTimeout(() => msg.remove(), 500);
         });
       }, 3000);
+
+      if (!localStorage.getItem("access")) {
+        window.location.href = "/login/";}
     </script>
   </body>
 </html>

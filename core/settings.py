@@ -27,6 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-6^t+e_%!7^dr$q0z@5k#0e6^t1^bg!g)48967@y=w-c!sv5n(_'
 
+AUTH_API_URL = "https://usuarioapi-production.up.railway.app"
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 DEV_FAKE_USER_ID = 1
@@ -53,6 +56,9 @@ INSTALLED_APPS = [
 # Configura o Django REST
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -69,7 +75,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.JWTAuthMiddleware' # Registrando o middleware
+    'bookshelf.middleware.JWTAuthMiddleware' # Registrando o middleware
 ]
 
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') # Integração real de microsserviços

@@ -161,5 +161,19 @@
     {% endif %}
   </div>
 </div>
+<script>
+async function carregarLivros() {
+  const response = await fetch("/api/books/", {
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("access")
+    }
+  });
+
+  const livros = await response.json();
+  console.log(livros);
+}
+
+carregarLivros();
+</script>
 
 {% endblock %}

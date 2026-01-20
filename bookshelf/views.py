@@ -7,15 +7,16 @@ from django.contrib.auth import logout
 
 from rest_framework import viewsets
 from .serializers import BookSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 def dashboard(request):
     user_id = request.external_user_id
     username = request.external_username
 
-    # Se não tiver token válido, não entra
+    # Se não tiver token válido, retorna para o login
     if not user_id:
-        return JsonResponse({'error': 'Usuário não autenticado'}, status=401)
+       return redirect('login')
     
     # Todos os contadores agora usam .filter(external_user_id=user_id)
     user_books = Book.objects.filter(external_user_id=user_id)
@@ -81,7 +82,9 @@ def excluir(request, pk):
 
 # NOVA API (JSON)
 class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         # A API só mostrará os livros do usuário dono do Token
