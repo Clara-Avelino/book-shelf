@@ -57,8 +57,16 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # Isso permite que a API use o login feito no seu views.py
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',],
+        # 'rest_framework.permissions.IsAuthenticated',],
+        'rest_framework.permissions.AllowAny', # Mude temporariamente para testar
+    ], 
 }
 
 SPECTACULAR_SETTINGS = {

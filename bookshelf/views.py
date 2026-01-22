@@ -4,6 +4,8 @@ from .models import Book
 from .forms import BookForm
 from django.contrib import messages
 from django.contrib.auth import logout
+import requests
+import json
 
 from rest_framework import viewsets
 from .serializers import BookSerializer
@@ -94,12 +96,65 @@ class BookViewSet(viewsets.ModelViewSet):
         # Ao salvar via API, vincula automaticamente ao usuário do Token
         serializer.save(external_user_id=self.request.external_user_id)
 
+# def login_view(request):
+#     return render(request, 'bookshelf/login.html')
+
 def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        body = {
+            "email": email,
+            "password": password
+        }
+
+        try:
+            # Chamada para a API
+            response = requests.post(
+                'https://usuarioapi-production.up.railway.app/api/login/', 
+                data=json.dumps(body), 
+                headers={'Content-Type': 'application/json'}
+            )
+
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Guardamos o token na SESSÃO do Django
+                request.session['auth_token'] = data.get('access') 
+                request.session['user_email'] = email
+                request.session.modified = True  # Força o Django a salvar a sessão
+                messages.success(request, "Login realizado com sucesso!")
+                return redirect('dashboard')
+            else:
+                messages.error(request, "E-mail ou senha inválidos.")
+        
+        except Exception:
+            messages.error(request, "Erro ao conectar com o serviço de autenticação.")
+
     return render(request, 'bookshelf/login.html')
 
 
 def register_view(request):
     return render(request, 'bookshelf/register.html')
+
+def register_user(request):
+    if request.POST:
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        body = {
+            "username": username,
+            "email": email,
+            "password": password,
+            "first_name": first_name,
+            "last_name": last_name
+        }
+        response = requests.post('https://usuarioapi-production.up.railway.app/api/registro/', data=json.dumps(body), headers={'Content-Type': 'application/json'})
+        if response.status_code == 201:
+            return redirect('login')
 
 
 def logout_view(request):

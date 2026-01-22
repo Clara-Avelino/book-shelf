@@ -6,17 +6,25 @@
     <div class="flex items-center gap-3">
       <i class="fas fa-book-bookmark text-3xl text-[#93b90e]"></i>
       <h1 class="text-2xl font-bold text-[#93b90e]">Book Shelf</h1>
-      <span class="text-gray-400 ml-4 italic">Bem-vindo, {{ username }}!</span>
+      <span class="text-gray-400 ml-4 italic"
+        >Bem-vindo, {{ username|default:"Usuário" }}
+        <!-- <script>
+          const urlParams = new URLSearchParams(window.location.search);
+          const email = urlParams.get("email");
+          document.write(email);
+        </script> -->
+
+        !</span
+      >
     </div>
 
-<a
-  href="{% url 'logout' %}"
-  class="border px-4 py-2 rounded-lg flex items-center gap-2 bg-white hover:bg-red-400 transition"
->
-  <i class="fas fa-right-from-bracket"></i>
-  <span>Sair</span>
-</a>
-
+    <a
+      href="{% url 'logout' %}"
+      class="border px-4 py-2 rounded-lg flex items-center gap-2 bg-white hover:bg-red-400 transition"
+    >
+      <i class="fas fa-right-from-bracket"></i>
+      <span>Sair</span>
+    </a>
   </div>
 
   <!-- RESUMO -->
@@ -162,18 +170,18 @@
   </div>
 </div>
 <script>
-async function carregarLivros() {
-  const response = await fetch("/api/books/", {
-    headers: {
-      "Authorization": "Bearer " + localStorage.getItem("access")
-    }
-  });
+  async function carregarLivros() {
+    const response = await fetch("/api/books/", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    });
 
-  const livros = await response.json();
-  console.log(livros);
-}
+    const livros = await response.json();
+    console.log(livros);
+  }
 
-carregarLivros();
+  carregarLivros();
 </script>
 
 {% endblock %}

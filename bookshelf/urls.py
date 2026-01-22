@@ -9,13 +9,14 @@ router.register(r'books', views.BookViewSet, basename='book-api')
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'), 
-    path('login/', views.login_view, name='login'),
-    path('register/', views.register_view, name='register'),
-    path('logout/', views.logout_view, name='logout'),
     path('adicionar/', views.adicionar, name='adicionar'), 
     path('editar/<int:pk>/', views.editar, name='editar'), 
-
     path('excluir/<int:pk>/', views.excluir, name='excluir'),
+
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('register_user/', views.register_user, name='register_user'),
+    path('logout/', views.logout_view, name='logout'),
     
     # Swagger e OpenAPI (http://127.0.0.1:8000/api/schema/swagger-ui/)
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'), # JSON técnico da API
