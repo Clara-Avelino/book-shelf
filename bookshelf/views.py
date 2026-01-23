@@ -6,11 +6,9 @@ from django.contrib import messages
 from django.contrib.auth import logout
 import requests
 import json
-
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticated
-
 
 def dashboard(request):
     user_id = request.external_user_id
@@ -20,7 +18,6 @@ def dashboard(request):
     if not user_id:
        return redirect('login')
     
-    # Todos os contadores agora usam .filter(external_user_id=user_id)
     user_books = Book.objects.filter(external_user_id=user_id)
     
     books = user_books.order_by('-created_at')
@@ -41,7 +38,6 @@ def dashboard(request):
 
 def adicionar(request):
     if request.method == 'POST':
-        # request.FILES é obrigatório para capturar a capa e o PDF
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             book = form.save(commit=False)
@@ -55,7 +51,6 @@ def adicionar(request):
     return render(request, 'bookshelf/form.html', {'form': form})
 
 def editar(request, pk):
-    # Busca o livro que pertence ao o usuário pelo ID (primary key) ou retorna 404 se não existir
     book = get_object_or_404(Book, pk=pk, external_user_id=request.external_user_id)
     
     if request.method == 'POST':
@@ -78,26 +73,28 @@ def excluir(request, pk):
         messages.success(request, 'O livro foi removido da sua estante.')
         return redirect('dashboard')
     
-    # Se não for POST, mostra uma página de confirmação simples
     return render(request, 'bookshelf/confirm_delete.html', {'book': book})
 
 
-# NOVA API (JSON)
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        # A API só mostrará os livros do usuário dono do Token
-        return Book.objects.filter(external_user_id=self.request.external_user_id)
-
+        # Captura o ID injetado pelo seu JWTAuthMiddleware
+        user_id = getattr(self.request, 'external_user_id', None)
+        
+        if user_id is not None:
+            # Se o middleware identificou o usuário (ex: ID 22), retorna os livros dele
+            return Book.objects.filter(external_user_id=user_id)
+        
+        # Se não houver usuário logado (acesso anônimo), retorna lista vazia
+        return Book.objects.none()
+        
     def perform_create(self, serializer):
-        # Ao salvar via API, vincula automaticamente ao usuário do Token
-        serializer.save(external_user_id=self.request.external_user_id)
-
-# def login_view(request):
-#     return render(request, 'bookshelf/login.html')
+        # Garante que, ao criar via POST na API, o livro seja salvo com o ID
+        user_id = getattr(self.request, 'external_user_id', None)
+        serializer.save(external_user_id=user_id)
 
 def login_view(request):
     if request.method == 'POST':
@@ -110,7 +107,6 @@ def login_view(request):
         }
 
         try:
-            # Chamada para a API
             response = requests.post(
                 'https://usuarioapi-production.up.railway.app/api/login/', 
                 data=json.dumps(body), 

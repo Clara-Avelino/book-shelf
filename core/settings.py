@@ -53,19 +53,17 @@ INSTALLED_APPS = [
     'bookshelf',                    # Adicionado para o app de livros
 ]
 
-# Configura o Django REST
+
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # Isso permite que a API use o login feito no seu views.py
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
 
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.IsAuthenticated',],
-        'rest_framework.permissions.AllowAny', # Mude temporariamente para testar
+        'rest_framework.permissions.AllowAny',  
     ], 
 }
 
@@ -83,7 +81,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'bookshelf.middleware.JWTAuthMiddleware' # Registrando o middleware
+    'bookshelf.middleware.JWTAuthMiddleware' 
 ]
 
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') # Integração real de microsserviços
@@ -112,7 +110,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DB_URL')) # Adicionado para configurar o banco de dados a partir da URL
+    'default': dj_database_url.config(default=os.getenv('DB_URL')) 
 }
 
 
@@ -160,3 +158,7 @@ STATICFILES_DIRS = [
 # Arquivos de Mídia e Estáticos
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Permite que o cookie de sessão seja enviado em requisições de API no mesmo domínio
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
+SESSION_COOKIE_SAMESITE = 'Lax'
