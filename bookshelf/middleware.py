@@ -12,6 +12,10 @@ class JWTAuthMiddleware:
         #     request.external_user_id = 1
         #     request.external_username = "dev"
         #     return self.get_response(request)
+
+        # Ignora a validação para arquivos estáticos
+        if request.path.startswith('/static/') or request.path.startswith('/media/'):
+            return self.get_response(request)
         
         # Inicializa como None
         request.external_user_id = None
