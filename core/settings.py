@@ -31,13 +31,13 @@ AUTH_API_URL = "https://usuarioapi-production.up.railway.app"
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Em produção, o DEBUG nunca deve ser True
+DEBUG = False
 DEV_FAKE_USER_ID = 1
 DEV_FAKE_USERNAME = "Clara Maria"
 
-
-ALLOWED_HOSTS = []
-
+# Domínio do PythonAnywhere
+ALLOWED_HOSTS = ['ClaraBookShelf.pythonanywhere.com', '127.0.0.1', 'localhost'] 
 
 # Application definition
 
@@ -149,6 +149,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Caminho onde o Django procurará arquivos estáticos nos apps
 STATICFILES_DIRS = [
