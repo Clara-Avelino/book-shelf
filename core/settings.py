@@ -25,19 +25,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6^t+e_%!7^dr$q0z@5k#0e6^t1^bg!g)48967@y=w-c!sv5n(_'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-AUTH_API_URL = "https://usuarioapi-production.up.railway.app"
-
+AUTH_API_URL = os.getenv('AUTH_API_URL', 'https://usuarioapi-production.up.railway.app')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Em produção, o DEBUG nunca deve ser True
-DEBUG = False
+DEBUG = os.getenv('RAILWAY_ENVIRONMENT') is None 
+
 DEV_FAKE_USER_ID = 1
 DEV_FAKE_USERNAME = "Clara Maria"
 
-# Domínio do PythonAnywhere
-ALLOWED_HOSTS = ['ClaraBookShelf.pythonanywhere.com', '127.0.0.1', 'localhost'] 
+ALLOWED_HOSTS = ['*'] 
 
 # Application definition
 
@@ -75,6 +73,7 @@ SPECTACULAR_SETTINGS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -110,7 +109,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DB_URL')) 
+    'default': dj_database_url.config(
+        default=os.getenv('DB_URL')
+    ) 
 }
 
 
@@ -148,13 +149,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+WHITENOISE_USE_MANIFEST_STORAGE = False
 
 # Caminho onde o Django procurará arquivos estáticos nos apps
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'bookshelf/static'),
 ]
+
+# Otimização do WhiteNoise para comprimir arquivos CSS/JS
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Arquivos de Mídia e Estáticos
 MEDIA_URL = '/media/'
@@ -163,3 +170,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Permite que o cookie de sessão seja enviado em requisições de API no mesmo domínio
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 SESSION_COOKIE_SAMESITE = 'Lax'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -89,7 +89,7 @@ class BookViewSet(viewsets.ModelViewSet):
             return Book.objects.filter(external_user_id=user_id)
         
         # Se não houver usuário logado (acesso anônimo), retorna lista vazia
-        return Book.objects.none()
+        return Book.objects.all() # Retorna todos os livros
         
     def perform_create(self, serializer):
         # Garante que, ao criar via POST na API, o livro seja salvo com o ID

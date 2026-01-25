@@ -17,6 +17,7 @@ djangorestframework==3.16.1
 drf-spectacular==0.29.0
 executing==1.2.0
 filelock==3.16.1
+gunicorn==24.1.1
 idna==3.11
 inflection==0.5.1
 ipykernel==6.24.0
