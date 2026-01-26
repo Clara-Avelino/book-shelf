@@ -36,6 +36,7 @@ DEV_FAKE_USER_ID = 1
 DEV_FAKE_USERNAME = "Clara Maria"
 
 ALLOWED_HOSTS = ['*'] 
+CSRF_TRUSTED_ORIGINS = ['https://*.render.com', 'https://*.onrender.com', 'http://127.0.0.1:8000', 'http://localhost:8000']
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -175,7 +176,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Permite que o cookie de sessão seja enviado em requisições de API no mesmo domínio
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
-SESSION_COOKIE_SAMESITE = 'Lax'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
