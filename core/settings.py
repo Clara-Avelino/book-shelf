@@ -108,17 +108,19 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-raw_db_url = os.getenv('DATABASE_URL', '')
-clean_db_url = raw_db_url.strip('"').strip("'")
+db_url = os.getenv('DATABASE_URL', '').strip('"').strip("'")
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+        default=db_url,
         conn_max_age=600,
         ssl_require={'sslmode': 'require'}
     )
 }
 
+if db_url and not DATABASES['default'].get('ENGINE'):
+    DATABASES['default'] = dj_database_url.parse(db_url)
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
