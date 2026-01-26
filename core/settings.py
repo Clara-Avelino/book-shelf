@@ -30,12 +30,17 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 AUTH_API_URL = os.getenv('AUTH_API_URL', 'https://usuarioapi-production.up.railway.app')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('RAILWAY_ENVIRONMENT') is None 
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 DEV_FAKE_USER_ID = 1
 DEV_FAKE_USERNAME = "Clara Maria"
 
 ALLOWED_HOSTS = ['*'] 
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
 
 # Application definition
 
@@ -111,13 +116,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 db_url = os.getenv('DATABASE_URL', '').strip('"').strip("'").strip()
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=db_url,
-        conn_max_age=600,
-        ssl_require={'sslmode': 'require'}
-    )
+    'default': dj_database_url.parse(db_url, conn_max_age=600)
 }
 
+# Garante o SSL para o Neon/Render
+DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
